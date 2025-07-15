@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12" # Specify your project's Python version
+          python-version: "3.12.4" # Specify your project's Python version
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -64,5 +64,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} << EOF
             cd /home/eshan/Metrix  # Change to your project directory
             git pull origin main   # Pull the latest code
+            echo "${{ secrets.ENV_VARS }}" > .env  # Add the environment variables
             sudo supervisorctl restart metrix  # Restart Supervisor program
           EOF

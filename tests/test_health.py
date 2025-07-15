@@ -6,7 +6,8 @@ from src.main import app
 
 @pytest.fixture
 def test_client():
-    return TestClient(app)
+    client = TestClient(app)
+    yield client
 
 
 @pytest.mark.asyncio

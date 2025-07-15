@@ -22,8 +22,10 @@ class ServiceRegistry:  # Singleton approach
         self._dependency_factories[service_type] = _get
 
     def get(self, service_type: Type[BaseService]) -> Callable[[], BaseService]:
+        if service_type not in self._dependency_factories:
+            raise KeyError(f"Service {service_type} not registered")
         # Return factory function, suitable for dependency injection
         return self._dependency_factories[service_type]
 
 
-service_registry = ServiceRegistry()
+service_registry: ServiceRegistry = ServiceRegistry()

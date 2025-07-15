@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 
@@ -27,18 +28,21 @@ async def websocket_endpoint(
     flag = True
 
     try:
-        # Create tasks for sending metrics and health data
-        metrics_task = asyncio.create_task(
-            websocket_service.send_metrics(websocket, flag)
-        )
-        health_task = asyncio.create_task(
-            websocket_service.send_api_health(websocket, flag)
-        )
+        #     # Create tasks for sending metrics and health data
+        #     metrics_task = asyncio.create_task(
+        #         websocket_service.send_metrics(websocket, flag)
+        #     )
+        #     health_task = asyncio.create_task(
+        #         websocket_service.send_api_health(websocket, flag)
+        #     )
 
         while True:
             try:
-                # Keep the connection alive
-                await websocket.receive_text()
+                await websocket_service.send_metrics(websocket, flag)
+                await websocket_service.send_api_health(websocket, flag)
+                await asyncio.sleep(1)
+                print("Sent Metrics and API Health")
+
             except WebSocketDisconnect:
                 break
 
@@ -47,5 +51,5 @@ async def websocket_endpoint(
 
     finally:
         flag = False  # Stop all tasks
-        metrics_task.cancel()
-        health_task.cancel()
+        print(f"{websocket.client.host} disconnected")
+        print(f"flag: {flag}")
