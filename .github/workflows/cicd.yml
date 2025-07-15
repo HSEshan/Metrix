@@ -14,12 +14,18 @@ on:
 jobs:
   ci:
     name: Pytest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       # Step 1: Checkout code
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12.4" # Specify your project's Python version
 
       # Step 3: Install dependencies
       - name: Install dependencies
